@@ -1,0 +1,31 @@
+<!--Sécurité Apache -.htaccess est un fichier de configuration permettant de gérer des fonctionnalités d’un serveur web.-->
+<!--Masquer les informations du serveur et de la signature-->
+ServerTokens Prod
+ServerSignature Off
+
+<!--Redirection vers public-->
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUIEST_URI} !^/public/ [NC] <!--Ignorer la casse-->
+    RewriteCond %{REQUIEST_URI} !^index.php [NC] <!--Evite les boucles si index.php est deja ciblé-->
+    RewriteRule ^(.*)$ /public/$1 [L]
+</IfModule>
+
+<!--Sécurité des fichiers sensibles-->
+<FilesMatch"\.(env|log|sql|md|json|lock|yml|yaml|ini)$"> 
+    Require all denied # Apache 2.4+ equivalent de Order allow,deny Deny from all
+</FilesMatch>
+
+<!--Protection des repertoires-->
+<DirectoryMatch "(config|src|tests|storage|vender|bootstrap|resources)">
+    Require all denied # Apache 2.4+ equivalent de Order allow,deny Deny from all
+</DirectoryMatch>
+
+<!--Headers de sécurité-->
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-Frame-Option DENY
+    Header always set X-XSS-Protection "1; mode=block"
+    <!--Header always set Strict_Transport-Security "max-age = 31536000; includeSudDomains"  que si on travail en https-->
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' "
+</IfModule>
