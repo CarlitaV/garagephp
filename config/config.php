@@ -1,8 +1,11 @@
 <?php
 
-
+namespace App\Config;
+use Dotenv\Dotenv;
 class Config{
 
+    /*Class config manuelle, cette class sert a charger le fichier .env, 
+    à le lire et séparer et nettoyer les données 
     private static array $config = [];
     private static bool $loaded = false;
 
@@ -48,27 +51,31 @@ class Config{
 
     public static function isDebug():bool{
         return self::get(get('APP_DEBUG', 'false') === 'true' );
-    }
+    } 
+    */
 
 
 /**
- * *@param string $path le chemin vers le dossier contenant le fichier .env
+ *  @param string $path le chemin vers le dossier contenant le fichier .env
  */
 
-    public static function laod($path = __DIR__ . '../')void{
+/*Les @param servent pour la php doc*/
+
+    public static function laod($path = __DIR__ . '../'):void{
+
         //On verifie si le fichier .env existe avant de tenter de le changer
-        if(file_exists($path . 'env')){
+        if(file_exists($path . '.env')){
             $dotenv = Dotenv::createImmutable($path);
             $dotenv->load();
         }
     }
-//Manque une acolade
+
     /**
      *  @param string $key le nom de la variable
      * @param mixed $default une valeur par defaut a retourner si la variable n'existe pas
      * @return mixed la valeur de la variable ou la valeur par defaut
      */
     public static function get(string $key, $default = null){
-        return $_ENV[$key] ?? $default:
+        return $_ENV[$key] ?? $default;
     }
 }
