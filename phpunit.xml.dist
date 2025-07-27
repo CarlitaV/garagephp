@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-2"?>
+<phpunit xmlns:xsi="<a href="http://www.w3.org/2001/XMLSchema-instance%22" rel="nofollow"><u>http://www.w3.org/2001/XMLSchema-instance"</u></a>
+         xsi:noNamespaceSchemaLocation="<a href="https://schema.phpunit.de/10.5/phpunit.xsd%22" rel="nofollow"><u>https://schema.phpunit.de/10.5/phpunit.xsd"</u></a>
+         bootstrap="tests/bootstrap.php"
+         colors="true"
+         cacheDirectory=".phpunit.cache">
+    <testsuites>
+        <testsuite name="Unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Functional">
+            <directory>tests/Functional</directory>
+        </testsuite>
+    </testsuites>
+    <source>
+        <include>
+            <directory>src</directory>
+        </include>
+    </source>
+</phpunit>
