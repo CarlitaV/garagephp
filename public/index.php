@@ -61,6 +61,3 @@ case FastRoute\Dispatcher::FOUND:
         }
         break;
 }
-
-
-
