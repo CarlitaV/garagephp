@@ -4,6 +4,11 @@ namespace App\Controllers;
 use App\Security\Validator;
 use App\Utils\Response;
 
+/**
+ * Controlleur de base
+ * Toutes les autres classe de controlleur hériteront de celle ci
+ */
+
 abstract class BaseController{
 
     protected Response $response;
@@ -15,23 +20,48 @@ abstract class BaseController{
         
     }
 
+
+    /**
+     * Afiche une vue en l'injectant dans le layout principal
+     * @param string $view le nom du fichier de vue
+     * @param array $data les données à rendre accessible dans la vue
+     */
     protected function render(string $view, array $data=[]):void{
 
+        //on construit le chemin complet vers le fichier de vue
         $viewPath = __DIR__. '/views/' .$view . 'php';
+
+        //On verifie que le fichier existe bien
         if(!file_exists($viewPath)){
             $this->response->error("Vue non trouvée : $viewPath", 500);
             return;
         }
+
+        //Extract tranforme les ckés d'un tableau en variables
+        //Ex: $data = ['title' => 'Accueil'] devient $title = 'Acceuil'
         extract($data);
+        // On utilise la mise en tampon de sortie (output buffering)pour capturer le HTML de la vue
         ob_start();
         include $viewPath;
+
+        //Ici on vide le cache la variable $content contient la vue
         $content = ob_get_clean();
+
+        //Finalement, on inclut le layout principal, qui paut maintenant utiliser la variable $content
         include __DIR__.'/views/layout.php';
     }
+
+    /**
+     * Récupere et nettoie les données envoyées via une requete POST
+     */
     protected function getPostData():array{
 
         return $this->validator->sanitize($_POST);
     }
+
+    /**
+     * Vérifie si l'utilisateur est connecter sinon le redirige vers la page login
+     */
 
     protected function requireAuth():void{
 
